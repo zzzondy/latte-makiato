@@ -1,18 +1,22 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidgetItem, QTableView, QWidget
 from PyQt5 import uic
+from UI.mainForm import Ui_MainWindow
+from UI.addCoffee import add_Form
+from UI.addEditCoffeeForm import addEdit_Form
+from UI.editCoffee import edit_Form
 import sqlite3
 import sys
 
 
-class CoffeeTable(QMainWindow):
+class CoffeeTable(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('main.ui', self)
+        self.setupUi(self)
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle('Таблица кофиев')
-        self.con = sqlite3.connect('coffee.db')
+        self.con = sqlite3.connect('data/coffee.db')
         self.modified = {}
         self.titles = None
         self.tableWidget.horizontalHeader().resizeSection(2, 150)
@@ -37,10 +41,10 @@ class CoffeeTable(QMainWindow):
         self.addEdit.show()
 
 
-class AddEditCoffee(QWidget):
+class AddEditCoffee(QWidget, addEdit_Form):
     def __init__(self):
         super().__init__()
-        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
         self.initUI()
 
     def initUI(self):
@@ -56,15 +60,15 @@ class AddEditCoffee(QWidget):
         self.editCoffeeForm.show()
 
 
-class AddCoffee(QWidget):
+class AddCoffee(QWidget, add_Form):
     def __init__(self):
         super().__init__()
-        uic.loadUi('addCoffee.ui', self)
+        self.setupUi(self)
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle('Добавить запись о кофе')
-        self.con = sqlite3.connect('coffee.db')
+        self.con = sqlite3.connect('data/coffee.db')
         self.add_coffee.clicked.connect(self.add_value)
 
     def add_value(self):
@@ -77,15 +81,15 @@ class AddCoffee(QWidget):
         self.close()
 
 
-class EditCoffee(QWidget):
+class EditCoffee(QWidget, edit_Form):
     def __init__(self):
         super().__init__()
-        uic.loadUi('editCoffee.ui', self)
+        self.setupUi(self)
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle('Изменить запись о кофе')
-        self.con = sqlite3.connect('coffee.db')
+        self.con = sqlite3.connect('data/coffee.db')
         self.modified = {}
         self.titles = None
         self.tableWidget.horizontalHeader().resizeSection(2, 150)
